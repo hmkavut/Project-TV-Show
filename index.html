@@ -12,26 +12,26 @@
 <body>
   <div id="root">
   </div>
-
-  <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-  <script src="episodes.js"></script>
-
-  <!-- Loads YOUR javascript code -->
-  <script src="script.js"></script>
-  <div id="container">
+  <label>
+  <input type="text" id="search" name="q" placeholder="Search term" /> 🔍
+</label>
+<label for="episode-select">Select Episode:</label>
+<select id="episode-select"></select>
+  <div id="container"></div>
     <template id="film-card">
       <section class="film">
         <div class="header">
           <h3>Film title</h3>
           <h4 id="season-number">Season Number</h4>
         </div>
-        <img src="/shared-assets/images/examples/grapefruit-slice.jpg"
+        <img src=""
           alt="Grapefruit slice atop a pile of other slices" 
           style="height: 150px;"/>
         <data summary>Summary</data>
       </section>
     </template>
-  </div>
+  <script src="episodes.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
