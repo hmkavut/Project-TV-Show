@@ -1,63 +1,69 @@
 //You can edit ALL of the code here
 let allEpisodes = [];
-function setup() {
+async function setup() {
   const card = document.getElementById("container");
-  allEpisodes = getAllEpisodes();
+  allEpisodes = await getAllEpisodes();
 
   render(allEpisodes); // Show all episodes initially
-  makePageForEpisodes(allEpisodes); 
+  makePageForEpisodes(allEpisodes);
   populateEpisodeSelect(allEpisodes);
 
   //search
-const searchBox = document.getElementById("search");
-searchBox.addEventListener("input", function handleSearchInput(event) {
-   const searchTerm = event.target.value.toLowerCase();
+  const searchBox = document.getElementById("search");
+  searchBox.addEventListener("input", function handleSearchInput(event) {
+    const searchTerm = event.target.value.toLowerCase();
 
     const filteredEpisodes = allEpisodes.filter((ep) => {
-    const nameMatch = ep.name.toLowerCase().includes(searchTerm);
-    const summaryMatch = ep.summary.toLowerCase().includes(searchTerm);
+      const nameMatch = ep.name.toLowerCase().includes(searchTerm);
+      const summaryMatch = ep.summary.toLowerCase().includes(searchTerm);
       return nameMatch || summaryMatch;
     });
-  
 
     render(filteredEpisodes); // Show filtered episodes
     makePageForEpisodes(filteredEpisodes);
   });
 }
-  const select = document.getElementById("episode-select");
-  select.addEventListener("change", function () {
-    const selected = select.value;
+const select = document.getElementById("episode-select");
+select.addEventListener("change", function () {
+  const selected = select.value;
 
-    if (selected === "all") {
-      render(allEpisodes);
-      makePageForEpisodes(allEpisodes);
-    } else {
-      const found = allEpisodes.find((ep) => {
-        const code = `S${String(ep.season).padStart(2, "0")}E${String(ep.number).padStart(2, "0")}`;
-        return code === selected;
-      });
+  if (selected === "all") {
+    render(allEpisodes);
+    makePageForEpisodes(allEpisodes);
+  } else {
+    const found = allEpisodes.find((ep) => {
+      const code = `S${String(ep.season).padStart(2, "0")}E${String(
+        ep.number
+      ).padStart(2, "0")}`;
+      return code === selected;
+    });
 
-      if (found) {
-        render([found]); // Wrap in array so render can loop it
-        makePageForEpisodes([found]);
-      }
+    if (found) {
+      render([found]); // Wrap in array so render can loop it
+      makePageForEpisodes([found]);
     }
-  });
+  }
+});
 
+async function getAllEpisodes() {
+  const url = "https://api.tvmaze.com/shows/82/episodes";
+  const response = await fetch(url);     
+  const data = await response.json(); 
+  return data;                    
+}
 
- function render(episodeList) {
+function render(episodeList) {
   const card = document.getElementById("container");
-   card.innerHTML = ""; 
- const filmCards = episodeList.map(createFilmCard);
-  
- card.append(...filmCards); 
- }
+  card.innerHTML = "";
+  const filmCards = episodeList.map(createFilmCard);
 
- 
+  card.append(...filmCards);
+}
+
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
-} 
+}
 
 function createFilmCard(film) {
   const card = document.getElementById("film-card").content.cloneNode(true);
@@ -84,7 +90,9 @@ function populateEpisodeSelect(episodes) {
   select.appendChild(allOption);
 
   episodes.forEach((ep) => {
-    const code = `S${String(ep.season).padStart(2, "0")}E${String(ep.number).padStart(2, "0")}`;
+    const code = `S${String(ep.season).padStart(2, "0")}E${String(
+      ep.number
+    ).padStart(2, "0")}`;
     const option = document.createElement("option");
     option.value = code;
     option.textContent = `${code} - ${ep.name}`;
