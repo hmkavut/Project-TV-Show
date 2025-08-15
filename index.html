@@ -12,12 +12,16 @@
 <body>
   <div id="root">
   </div>
+    <button id="btnVisible" hidden = true>
+      Display All Shows
+    </button>
   <label for="search">Search term 🔍</label>
   <input type="text" id="search" name="q" placeholder="Search term" /> 
 </label>
-<label for="show-select">Select Show:</label>
-<select id="show-select"></select>
-
+<div id="display-shows">
+  <label for="show-select">Select Show:</label>
+  <select id="show-select"></select>
+</div>
 <label for="episode-select">Select Episode:</label>
 <select id="episode-select">
 <option value="">-- Select an episode --</option>
@@ -46,7 +50,7 @@
     <template id="episode-card">
       <section class="film">
         <div class="header">
-          <h3>Episode title</h3>
+          <h3 id="default">Episode title</h3>
           <h4 id="season-number">Season Number</h4>
         </div>
         <img src="" alt="Episode image" style="height: 150px;"/>
