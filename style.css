@@ -8,25 +8,36 @@
   gap: 20px;
   padding: 20px;
   box-sizing: border-box;
+  scroll-snap-type: x mandatory;
 }
 
 .header {
+  color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 12px;
-  border: 1px solid black;
+  border: 1px solid rgb(196, 191, 191);
   margin: 5px;
 }
 
 .film {
+  color: white;
   border: 1px solid #ccc;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
-  background-color: white;
+  background-color: rgb(35, 33, 33);
+  transform: scale(0.95);
 }
 
 body {
-  background-color: gray;
+  color:white;
+  background-color: rgb(43, 40, 40);
+}
+#search {
+  color: white;
+}
+#show-select {
+  color:rgb(7, 8, 8);
 }

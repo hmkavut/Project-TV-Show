@@ -12,25 +12,47 @@
 <body>
   <div id="root">
   </div>
-  <label>
-  <input type="text" id="search" name="q" placeholder="Search term" /> 🔍
+  <label for="search">Search term 🔍</label>
+  <input type="text" id="search" name="q" placeholder="Search term" /> 
 </label>
+<label for="show-select">Select Show:</label>
+<select id="show-select"></select>
+
 <label for="episode-select">Select Episode:</label>
-<select id="episode-select"></select>
-  <div id="container"></div>
-    <template id="film-card">
+<select id="episode-select">
+<option value="">-- Select an episode --</option>
+</select>
+   <!--Shows Container-->
+  <div id="shows-container"></div>
+    <!--Template for Shows-->
+    <template id="show-card">
       <section class="film">
         <div class="header">
-          <h3>Film title</h3>
-          <h4 id="season-number">Season Number</h4>
+          <h3>Show title</h3>
         </div>
-        <img src=""
-          alt="Grapefruit slice atop a pile of other slices" 
-          style="height: 150px;"/>
-        <data summary>Summary</data>
+            <a href="#" target="">
+            <img src="" alt="Show image">
+          </a>
+          <p class="summary">Summary</p>
+        <p class="rate"></p>
+        <p class="genres"></p>
+        <p class="status"></p>
+        <p class="runtime"></p>
       </section>
     </template>
-  <script src="episodes.js"></script>
+  <!--Episodes container-->
+  <div id="episode-container"></div>
+   <!---Template for Episodes-->
+    <template id="episode-card">
+      <section class="film">
+        <div class="header">
+          <h3>Episode title</h3>
+          <h4 id="season-number">Season Number</h4>
+        </div>
+        <img src="" alt="Episode image" style="height: 150px;"/>
+        <p summary>Summary</p>
+      </section>
+    </template>
   <script src="script.js"></script>
 </body>
 
