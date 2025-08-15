@@ -87,6 +87,7 @@ async function getAllEpisodes(showId) {
  // Render episodes (unchanged)
 function render(episodeList) {
   const card = document.getElementById("episode-container");
+  document.getElementById("shows-container").hidden=true;
   card.innerHTML = "";
   const filmCards = episodeList.map(createFilmCard);
 
