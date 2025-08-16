@@ -65,22 +65,26 @@ async function setup() {
         const summaryMatch = ep.summary.toLowerCase().includes(searchTerm);
         return nameMatch || summaryMatch;
       });
-
+      if (filteredShows.length == 0) {
+        alert("There is no show");
+      }
       filteredShows.sort((a, b) =>
         a.name.toLowerCase().localeCompare(b.name.toLowerCase())
       );
       renderShows(filteredShows);
       populateShowSelect(filteredShows);
-    }
-    if (!isShow) {
+    } else {
+      console.log(isShow);
       const searchTerm = event.target.value.toLowerCase();
-
       const filteredEpisodes = allEpisodes.filter((ep) => {
+        console.log(allEpisodes + "df");
         const nameMatch = ep.name.toLowerCase().includes(searchTerm);
         const summaryMatch = ep.summary.toLowerCase().includes(searchTerm);
         return nameMatch || summaryMatch;
       });
-
+      if (filteredEpisodes.length == 0) {
+        alert("There is no episode");
+      }
       render(filteredEpisodes); // Show filtered episodes
       makePageForEpisodes(filteredEpisodes);
     }
@@ -101,13 +105,27 @@ async function setup() {
   });
 }
 // Fetch shows
-
 async function getAllShows() {
-  if (allShows.length === 0) { // fetch only if not already fetched
+  if (allShows.length === 0) {
+    // fetch only if not already fetched
     const url = "https://api.tvmaze.com/shows";
-    const response = await fetch(url);
-    allShows = await response.json();
+
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP error! Status: ${response.status} - ${response.statusText}`
+        );
+      }
+
+      allShows = await response.json();
+    } catch (error) {
+      console.error("Failed to fetch shows:", error.message);
+      allShows = []; // fallback so it doesn’t stay undefined
+    }
   }
+
   return allShows;
 }
 // Fetch episodes for a show
@@ -144,7 +162,7 @@ function createFilmCard(film) {
   card.querySelector("#season-number").textContent = combineSeasonEpisode;
   card.querySelector("img").src = film.image?.medium || "";
   card.querySelector("img").alt = film.name;
-  card.querySelector("[summary]").innerHTML = film.summary || "";
+  card.querySelector("p").innerHTML = film.summary || "";
 
   return card;
 }
@@ -166,14 +184,14 @@ function renderShows(showList) {
         allEpisodesByShow[selectedShowId] = episodes;
       }
 
-      const selectedEpisodes = allEpisodesByShow[selectedShowId];
-      render(selectedEpisodes);
-      makePageForEpisodes(selectedEpisodes);
-      populateEpisodeSelect(selectedEpisodes);
+      allEpisodes = allEpisodesByShow[selectedShowId];
+      render(allEpisodes);
+      makePageForEpisodes(allEpisodes);
+      populateEpisodeSelect(allEpisodes);
     });
     card.querySelector("img").src = show.image?.medium || "";
     card.querySelector("img").alt = show.name;
-    card.querySelector(".summary").innerHTML = show.summary || "";
+    card.querySelector("p").innerHTML = show.summary || "";
     card.querySelector(".rate").textContent = `Rating: ${
       show.rating.average || "N/A"
     }`;
@@ -191,7 +209,7 @@ function renderShows(showList) {
 async function populateShowSelect(shows) {
   const select = document.getElementById("show-select");
   select.innerHTML = "";
-
+  isShow = true;
   shows.forEach((show) => {
     const option = document.createElement("option");
     option.value = show.id;
@@ -203,7 +221,7 @@ async function populateShowSelect(shows) {
 async function populateEpisodeSelect(episodes) {
   const select = document.getElementById("episode-select");
   select.innerHTML = ""; // Clear old options
-
+  isShow = false;
   // Add a default option to show all episodes
   const allOption = document.createElement("option");
   allOption.value = "all";
