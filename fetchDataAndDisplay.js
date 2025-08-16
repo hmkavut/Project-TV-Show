@@ -11,6 +11,7 @@ async function setup() {
   );
   renderShows(allShows);
   populateShowSelect(allShows);
+  document.getElementById("show-count").innerText = allShows.length;
 
   //Select For Shows
   const showSelect = document.getElementById("show-select");
@@ -19,16 +20,31 @@ async function setup() {
     const selectedShowId = event.target.value;
     isShow = false;
     if (!selectedShowId) return;
-
-    // Fetch episodes only once per show
-    if (!allEpisodesByShow[selectedShowId]) {
-      const episodes = await getAllEpisodes(selectedShowId);
-      allEpisodesByShow[selectedShowId] = episodes;
+    if (selectedShowId === "all") {
+      isShow = true;
+    allShows.sort((a, b) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    );
+    renderShows(allShows);
+    populateShowSelect(allShows);
+    document.getElementById("display-shows").hidden = false;
+    document.getElementById("btnVisible").hidden = true;
+    document.getElementById("shows-container").hidden = false;
+    document.getElementById("episode-container").hidden = true;
+    document.getElementById("show-count").hidden=false;
+    document.getElementById("show-count").innerText = allShows.length;
+    } else {
+      // Fetch episodes only once per show
+      if (!allEpisodesByShow[selectedShowId]) {
+        const episodes = await getAllEpisodes(selectedShowId);
+        allEpisodesByShow[selectedShowId] = episodes;
+      }
+      document.getElementById("show-count").hidden=true;
+      allEpisodes = allEpisodesByShow[selectedShowId];
+      render(allEpisodes);
+      makePageForEpisodes(allEpisodes);
+      populateEpisodeSelect(allEpisodes);
     }
-    allEpisodes = allEpisodesByShow[selectedShowId];
-    render(allEpisodes);
-    makePageForEpisodes(allEpisodes);
-    populateEpisodeSelect(allEpisodes);
   });
 
   // Episode selection
@@ -138,6 +154,8 @@ async function getAllEpisodes(showId) {
 
 // Render episodes (unchanged)
 function render(episodeList) {
+  console.log(episodeList)
+  document.getElementById("show-count").hidden=false;
   const card = document.getElementById("episode-container");
   document.getElementById("shows-container").hidden = true;
   card.innerHTML = "";
@@ -152,12 +170,13 @@ function makePageForEpisodes(episodeList) {
 }
 //Create episode card
 function createFilmCard(film) {
+document.getElementById("show-count").hidden=true;
   const card = document.getElementById("episode-card").content.cloneNode(true);
   const combineSeasonEpisode = `S${String(film.season).padStart(
     2,
     "0"
   )}E${String(film.number).padStart(2, "0")}`;
-
+console.log("a");
   card.querySelector("h3").textContent = film.name;
   card.querySelector("#season-number").textContent = combineSeasonEpisode;
   card.querySelector("img").src = film.image?.medium || "";
@@ -210,6 +229,11 @@ async function populateShowSelect(shows) {
   const select = document.getElementById("show-select");
   select.innerHTML = "";
   isShow = true;
+  // Add a default option to show all shows
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "Show All Series";
+  select.appendChild(allOption);
   shows.forEach((show) => {
     const option = document.createElement("option");
     option.value = show.id;
