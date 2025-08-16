@@ -1,3 +1,6 @@
+section {
+  --main-bg-color: rgb(35, 33, 33);;
+}
 #root {
   color: red;
 }
@@ -27,7 +30,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
-  background-color: rgb(35, 33, 33);
+  background-color: var(--main-bg-color);
   transform: scale(0.95);
 }
 
@@ -36,8 +39,11 @@ body {
   background-color: rgb(43, 40, 40);
 }
 #search {
-  color: white;
+  color: black;
 }
 #show-select {
   color:rgb(7, 8, 8);
+}
+#summary{
+  padding: 3px;
 }
